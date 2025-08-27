@@ -10,6 +10,16 @@ using std::placeholders::_1;
  * YOUR OBJECTIVE - take in the /cmd_vel topic, and publish a velocity to /left_drive and /right_drive
  * according to the velocity (assume a tank drive robot).
  * 
+ * 
+ * use these equations, which are standard for a tank drive robot:
+ * 
+ * Left Velocity = Linear Velocity x - 0.5 * Angular Velocity z * Wheelbase
+ * 
+ * Right Velocity = Linear Velocity + 0.5 * Angular Velocity * Wheelbase.
+ * 
+ * 
+ * ***** assume a wheelbase of 1 meter ****
+ * 
  */
 class MinimalSubscriber : public rclcpp::Node
 {
@@ -18,11 +28,11 @@ class MinimalSubscriber : public rclcpp::Node
     : Node("minimal_subscriber")
     {
       velocity_subscriber = this->create_subscription<YOUR::MESSAGE::TYPE>(//fill in message type
-      "/hello_world", 10, std::bind(&MinimalSubscriber::velocity_callback, this, _1));
+      "/hello_world", 10, std::bind(&MinimalSubscriber::your_callback, this, _1));
     }
 
   private:
-    void topic_callback(const std_msgs::msg::String::SharedPtr msg) const
+    void your_callback(const std_msgs::msg::String::SharedPtr msg) const
     {
       //your callback code here: this should include the code you want to run every time
       // a new mesage is recieved on your subscription
@@ -32,7 +42,7 @@ class MinimalSubscriber : public rclcpp::Node
 
 int main(int argc, char * argv[])
 {
-  rclcpp::init(argc, argv);
+  rclcpp::init(argc, argv); 
   rclcpp::spin(std::make_shared<MinimalSubscriber>());
   rclcpp::shutdown();
   return 0;
