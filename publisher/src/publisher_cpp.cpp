@@ -2,9 +2,11 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <cmath>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 
 using namespace std::chrono_literals;
 
@@ -17,21 +19,22 @@ class MinimalPublisher : public rclcpp::Node
     MinimalPublisher()
     : Node("minimal_publisher"), count_(0)
     {
-      publisher_ = this->create_publisher<std_msgs::msg::String>("/hello_world", 10);
+      publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
       timer_ = this->create_wall_timer(
-      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      10ms, std::bind(&MinimalPublisher::timer_callback, this));
     }
 
   private:
     void timer_callback()
     {
-      auto message = std_msgs::msg::String();
-      message.data = "Hello, world! " + std::to_string(count_++);
-      RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-      publisher_->publish(message);
+      auto drive_velocity = geometry_msgs::msg::Twist();
+      drive_velocity.linear.x = std::sin((1.0/1000)*count_);
+      drive_velocity.angular.z = 0.5*std::sin((1.0/5000)*count_);
+      count_++;
+      publisher_->publish(drive_velocity);
     }
     rclcpp::TimerBase::SharedPtr timer_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
     size_t count_;
 };
 
