@@ -32,10 +32,9 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void your_callback(const std_msgs::msg::String::SharedPtr msg) const
+    void your_callback(const geometry_msgs::msg::Twist::SharedPtr msg) const
     {
-      //your callback code here: this should include the code you want to run every time
-      // a new mesage is recieved on your subscription
+
     }
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber; //note the message type
 };
