@@ -15,7 +15,7 @@ using std::placeholders::_1;
  * 
  * Left Velocity = Linear Velocity x - 0.5 * Angular Velocity z * Wheelbase
  * 
- * Right Velocity = Linear Velocity + 0.5 * Angular Velocity * Wheelbase.
+ * Right Velocity = Linear Velocity + 0.5 * Angular Velocity z * Wheelbase.
  * 
  * 
  * ***** assume a wheelbase of 1 meter ****
