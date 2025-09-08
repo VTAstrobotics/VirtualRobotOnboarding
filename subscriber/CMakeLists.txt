@@ -11,11 +11,11 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-add_executable(velocity_node src/velocity_node_cpp.cpp)
-ament_target_dependencies(velocity_node rclcpp std_msgs geometry_msgs)
+add_executable(motor_node src/motor_node_cpp.cpp)
+ament_target_dependencies(motor_node rclcpp std_msgs geometry_msgs)
 
 install(TARGETS
-  velocity_node
+  motor_node
   DESTINATION lib/${PROJECT_NAME})
 # uncomment the following section in order to fill in
 # further dependencies manually.

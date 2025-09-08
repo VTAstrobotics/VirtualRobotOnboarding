@@ -28,16 +28,16 @@ using std::placeholders::_1;
  * 
  * 
  */
-class VelocityNode : public rclcpp::Node
+class MotorNode : public rclcpp::Node
 {
   public:
-    VelocityNode()
-    : Node("velocity_node")
+    MotorNode()
+    : Node("motor_node")
     {
       //this is where you assign subscribers and publishers to a topic.
 
       velocity_subscriber = this->create_subscription<TODO(1)::MESSAGE::TYPE>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
-      "/TODO(2)", 10, std::bind(&VelocityNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic.
+      "/TODO(2)", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic.
 
 
 
@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
   //you don't have to worry about changing any of this for now
   //this is the code that makes everything run
   rclcpp::init(argc, argv); 
-  rclcpp::spin(std::make_shared<VelocityNode>());
+  rclcpp::spin(std::make_shared<MotorNode>());
   rclcpp::shutdown();
   return 0;
 }
