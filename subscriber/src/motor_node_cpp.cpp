@@ -36,13 +36,13 @@ class MotorNode : public rclcpp::Node
     {
       //this is where you assign subscribers and publishers to a topic.
 
-      velocity_subscriber = this->create_subscription<TODO(1)::MESSAGE::TYPE>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
-      "/TODO(2)", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic.
+      velocity_subscriber = this->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel", 10, std::bind(&MotorNode::your_callback, this, _1));
 
 
 
 
       left_publisher = this->create_publisher<std_msgs::msg::Float64>("/left_drive", 10);//example for left publisher.
+      right_publisher = this->create_publisher<std_msgs::msg::Float64>("/right_drive", 10);//example for left publisher.
       //TODO(3) - assign the right publisher you create to a topic 
     }
 
@@ -56,10 +56,16 @@ class MotorNode : public rclcpp::Node
        * and one for /right_drive
       */
 
+      double lin_x = msg->linear.x; // this is how you get the x velocity from the message. Try angular z!
+      double ang_z = msg->angular.z;
+      std_msgs::msg::Float64 left_velocity;
+      std_msgs::msg::Float64 right_velocity;
+      left_velocity.data = lin_x - 0.5 * ang_z * 1.0;
+      right_velocity.data = lin_x + 0.5 * ang_z * 1.0;
 
-
-        double lin_x = msg->linear.x; // this is how you get the x velocity from the message. Try angular z!
-
+      // Left Velocity = Linear Velocity x - 0.5 * Angular Velocity z * Wheelbase
+      left_publisher->publish(left_velocity);
+      right_publisher->publish(right_velocity);
     }
 
 
@@ -69,6 +75,7 @@ class MotorNode : public rclcpp::Node
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber; //note the message type (hint - TODO(1))
 
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr left_publisher; // example for the /left_drive publisher. You need to make the right publisher.
+    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr right_publisher;
     //TODO(5) - create the publisher for the right motor
     
 };
