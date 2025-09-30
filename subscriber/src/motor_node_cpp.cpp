@@ -36,8 +36,8 @@ class MotorNode : public rclcpp::Node
     {
       //this is where you assign subscribers and publishers to a topic.
 
-      velocity_subscriber = this->create_subscription<TODO(1)::MESSAGE::TYPE>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
-      "/TODO(2)", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic.
+      velocity_subscriber = this->create_subscription</* geometry_msgs::msg::Twist */>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
+      "/TODO(2)", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic. You should change the string on this line
 
 
 
@@ -60,6 +60,13 @@ class MotorNode : public rclcpp::Node
 
         double lin_x = msg->linear.x; // this is how you get the x velocity from the message. Try angular z!
 
+        std_msgs::msg::Float64 left_velocity;
+
+        left_velocity.data = //ROS2 messages require you to use .data to add information to the variable you are publishing
+        left_publisher->publish(left_velocity) 
+        /*** this is how you would publish a variable.
+        Note that the variable is incomplete at this point (you have to do the math at the top to assign left_velocity to the right value)
+        */
     }
 
 
