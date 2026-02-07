@@ -36,14 +36,13 @@ class MotorNode : public rclcpp::Node
     {
       //this is where you assign subscribers and publishers to a topic.
 
-      velocity_subscriber = this->create_subscription</* geometry_msgs::msg::Twist */>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
-      "/TODO(2)", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic. You should change the string on this line
-
-
+      velocity_subscriber = this->create_subscription<geometry_msgs::msg::Twist>( // TODO(1): fill in message type for your velocity subscriber! should be a twist message type.
+      "/cmd_vel", 10, std::bind(&MotorNode::your_callback, this, _1)); //TODO(2), change topic so subscriber listens to /cmd_vel topic. You should change the string on this line
 
 
       left_publisher = this->create_publisher<std_msgs::msg::Float64>("/left_drive", 10);//example for left publisher.
       //TODO(3) - assign the right publisher you create to a topic 
+      right_publisher = this->create_publisher<std_msgs::msg::Float64>("/right_drive", 10);
     }
 
   private:
@@ -55,28 +54,30 @@ class MotorNode : public rclcpp::Node
        * the left motor and right motor velocities, and publish them to their respective topics using two publishers, one for /left_drive
        * and one for /right_drive
       */
-
-
+        const int wheelBase = 1;
 
         double lin_x = msg->linear.x; // this is how you get the x velocity from the message. Try angular z!
-
+        double ang_z = msg->angular.z;
         std_msgs::msg::Float64 left_velocity;
+        std_msgs::msg::Float64 right_velocity;
 
-        left_velocity.data = //ROS2 messages require you to use .data to add information to the variable you are publishing
-        left_publisher->publish(left_velocity) 
+        left_velocity.data = lin_x - 0.5 * ang_z * wheelBase; //ROS2 messages require you to use .data to add information to the variable you are publishing
+        left_publisher->publish(left_velocity);
         /*** this is how you would publish a variable.
         Note that the variable is incomplete at this point (you have to do the math at the top to assign left_velocity to the right value)
         */
+        right_velocity.data = lin_x - 0.5 * ang_z * wheelBase;
+        right_publisher->publish(right_velocity);
     }
 
 
     //this is where you can declare subscribers/publishers.
-
-
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber; //note the message type (hint - TODO(1))
 
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr left_publisher; // example for the /left_drive publisher. You need to make the right publisher.
     //TODO(5) - create the publisher for the right motor
+    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr right_publisher; // example for the /left_drive publisher. You need to make the right publisher.
+
     
 };
 
